@@ -117,7 +117,22 @@ function createRoot(container) {
   return new AReactDomRoot(container);
 }
 
+function act(callback) {
+  callback();
+  return new Promise((resolve) => {
+    function loop() {
+      if (workInProgress) {
+        window.requestIdleCallback(loop);
+      } else {
+        resolve();
+      }
+    }
+    loop();
+  })
+}
+
 export default {
   createElement,
   createRoot,
+  act,
 }

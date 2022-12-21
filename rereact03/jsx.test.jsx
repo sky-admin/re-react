@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import AReact from './AReact.jsx'
+const act = AReact.act
 
 function sleep(ms) {
   return new Promise(resolve => {
@@ -8,7 +9,7 @@ function sleep(ms) {
 }
 
 describe('ReReact JSX', () => {
-  it('should render JSX', () => {
+  it('should render JSX', async () => {
     const container = document.createElement('div');
     const element = (
       <div id="foo">
@@ -18,11 +19,13 @@ describe('ReReact JSX', () => {
     );
     console.log(element);
     const root = AReact.createRoot(container);
-    root.render(element);
+    await act(() => {
+      root.render(element);
+    });
     expect(container.innerHTML).toBe('<div id="foo"><div id="bar"></div><button></button></div>')
   })
 
-  it('should render JSX with text', () => {
+  it('should render JSX with text', async () => {
     const container = document.createElement('div');
     const element = (
       <div id="foo">
@@ -32,11 +35,13 @@ describe('ReReact JSX', () => {
     );
     console.log(JSON.stringify(element));
     const root = AReact.createRoot(container);
-    root.render(element);
+    await act(() => {
+      root.render(element);
+    })
     expect(container.innerHTML).toBe('<div id="foo"><div id="bar">Hello</div><button>Add</button></div>')
   })
 
-  it('should render JSX with different props', () => {
+  it('should render JSX with different props', async () => {
     const container = document.createElement('div');
     const element = (
       <div id="foo" className="bar">
@@ -45,13 +50,15 @@ describe('ReReact JSX', () => {
     );
     console.log(element);
     const root = AReact.createRoot(container);
-    root.render(element);
+    await act(() => {
+      root.render(element);
+    })
     expect(container.innerHTML).toBe('<div id="foo" class="bar"><button></button></div>')
   })
 })
 
 describe('ReReact Concurrent', () => {
-  it.only('should render in async', async function () {
+  it('should render in async', async function () {
     const container = document.createElement('div');
     const element = (
       <div id="foo">
@@ -61,9 +68,10 @@ describe('ReReact Concurrent', () => {
     );
     console.log(element);
     const root = AReact.createRoot(container);
-    root.render(element);
-    expect(container.innerHTML).toBe('')
-    await sleep(1000);
+    await act(() => {
+      root.render(element);
+      expect(container.innerHTML).toBe('')
+    })
     expect(container.innerHTML).toBe('<div id="foo"><div id="bar"></div><button></button></div>')
   })
 })
