@@ -1,3 +1,5 @@
+import '../requestIdleCallbackPolyfill.js';
+
 function createElement(type, props, ...children) {
   return {
     type,
@@ -46,7 +48,8 @@ class AReactDomRoot {
     workInProgressRoot = this._internalRoot;
     workInProgress = workInProgressRoot.current.alternate;
 
-    setTimeout(workloop);
+    window.requestIdleCallback(workloop);
+    // setTimeout(workloop);
     // this.renderImpl(element, this.container);
   }
 }
