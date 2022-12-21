@@ -75,3 +75,23 @@ describe('ReReact Concurrent', () => {
     expect(container.innerHTML).toBe('<div id="foo"><div id="bar"></div><button></button></div>')
   })
 })
+
+describe('Function Component', () => {
+  it('should render Function Component', async function () {
+    const container = document.createElement('div');
+    function App() {
+      return (
+        <div id="foo">
+          <div id="bar"></div>
+          <button></button>
+        </div>
+      );
+    }
+    const root = AReact.createRoot(container);
+    await act(() => {
+      root.render(<App />);
+      expect(container.innerHTML).toBe('')
+    })
+    expect(container.innerHTML).toBe('<div id="foo"><div id="bar"></div><button></button></div>')
+  })
+})
