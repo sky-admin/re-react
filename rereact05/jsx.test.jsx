@@ -118,3 +118,29 @@ describe('Function Component', () => {
     expect(container.innerHTML).toBe('<div id="foo"><div id="bar">main title</div><button></button><div id="foo"><div id="bar">sub title</div><button></button></div></div>')
   })
 })
+
+describe('Hooks', () => {
+  it.only('should support useState', async function () {
+    const container = document.createElement('div');
+    const globalObject = {};
+
+    function App() {
+      const [count, setCount] = AReact.useState(100);
+      globalObject.count = count;
+      globalObject.setCount = setCount;
+
+      return (<div>{count}</div>)
+    }
+
+    const root = AReact.createRoot(container);
+    await act(() => {
+      root.render(<App/>);
+    });
+
+    await act(() => {
+      globalObject.setCount((count) => count + 1);
+    });
+
+    expect(globalObject.count).toBe(101)
+  })
+})
