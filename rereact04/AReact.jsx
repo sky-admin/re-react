@@ -5,7 +5,7 @@ function createElement(type, props, ...children) {
     type,
     props: {
       ...props,
-      children: children.map(child => {
+      children: children.flat().map(child => {
         return typeof child !== 'object' ? createTextElement(child) : child;
       })
     }

@@ -94,4 +94,27 @@ describe('Function Component', () => {
     })
     expect(container.innerHTML).toBe('<div id="foo"><div id="bar"></div><button></button></div>')
   })
+
+  it('should render nested Function Component', async function () {
+    const container = document.createElement('div');
+    function App(props) {
+      return (
+        <div id="foo">
+          <div id="bar">{props.title}</div>
+          <button></button>
+          {props.children}
+        </div>
+      );
+    }
+    const root = AReact.createRoot(container);
+    await act(() => {
+      root.render(
+        <App title='main title'>
+          <App title='sub title'/>
+        </App>
+      );
+      expect(container.innerHTML).toBe('')
+    })
+    expect(container.innerHTML).toBe('<div id="foo"><div id="bar">main title</div><button></button><div id="foo"><div id="bar">sub title</div><button></button></div></div>')
+  })
 })
