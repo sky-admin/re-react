@@ -169,7 +169,8 @@ function useState(initialState) {
 
   const hook = {
     state: oldHook ? oldHook.state : initialState,
-    queue: []
+    queue: [],
+    dispatch: oldHook ? oldHook.dispatch : null,
   }
 
   const actions = oldHook ? oldHook.queue : [];
@@ -177,7 +178,7 @@ function useState(initialState) {
     hook.state = action(hook.state);
   })
 
-  const setState = (action) => {
+  const setState = oldHook ? oldHook.dispatch : (action) => {
     hook.queue.push(action);
 
     // re-render
