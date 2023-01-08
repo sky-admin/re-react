@@ -120,7 +120,7 @@ describe('Function Component', () => {
 })
 
 describe('Hooks', () => {
-  it.only('should support useState', async function () {
+  it('should support useState', async function () {
     const container = document.createElement('div');
     const globalObject = {};
 
@@ -142,5 +142,29 @@ describe('Hooks', () => {
     });
 
     expect(globalObject.count).toBe(101)
+  })
+
+  it.only('should support useState pass value', async function () {
+    const container = document.createElement('div');
+    const globalObject = {};
+
+    function App() {
+      const [count, setCount] = AReact.useState(100);
+      globalObject.count = count;
+      globalObject.setCount = setCount;
+
+      return (<div>{count}</div>)
+    }
+
+    const root = AReact.createRoot(container);
+    await act(() => {
+      root.render(<App/>);
+    });
+
+    await act(() => {
+      globalObject.setCount(102);
+    });
+
+    expect(globalObject.count).toBe(102)
   })
 })
