@@ -234,3 +234,31 @@ describe('Event binding', () => {
     expect(increaseSpy).toBeCalledTimes(2);
   })
 })
+
+describe('Reconciler', () => {
+  it('should support DOM CRUD', async function () {
+    const container = document.createElement('div');
+    function App() {
+      const [count, setCount] = AReact.useState(2);
+
+      return (
+        <div>
+          {count}
+          <button onClick={() => {setCount((count) => count + 1)}}></button>
+          <button onClick={() => {setCount((count) => count - 1)}}></button>
+          <ul>
+            {Array(count).fill(1).map((val, index) => (
+              <li>{index}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    const root = AReact.createRoot(container);
+    await act(() => {
+      root.render(<App />);
+      expect(container.innerHTML).toBe('')
+    })
+    expect(container.innerHTML).toBe('<div>2<button></button><button></button><ul><li>0</li><li>1</li></ul></div>')
+  })
+})
