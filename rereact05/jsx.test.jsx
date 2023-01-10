@@ -144,7 +144,7 @@ describe('Hooks', () => {
     expect(globalObject.count).toBe(101)
   })
 
-  it.only('should support useState pass value', async function () {
+  it('should support useState pass value', async function () {
     const container = document.createElement('div');
     const globalObject = {};
 
@@ -163,6 +163,38 @@ describe('Hooks', () => {
 
     await act(() => {
       globalObject.setCount(102);
+    });
+
+    expect(globalObject.count).toBe(102)
+  })
+
+  it('should support useReducer', async function () {
+    const container = document.createElement('div');
+    const globalObject = {};
+
+    function reducer(state, action) {
+      switch (action.type) {
+        case 'add': return state + 1;
+        case 'sub': return state - 1;
+      }
+    }
+
+    function App() {
+      const [count, dispatch] = AReact.useReducer(reducer, 100);
+      globalObject.count = count;
+      globalObject.dispatch = dispatch;
+
+      return (<div>{count}</div>)
+    }
+
+    const root = AReact.createRoot(container);
+    await act(() => {
+      root.render(<App/>);
+    });
+
+    await act(() => {
+      globalObject.dispatch({ type: 'add' });
+      globalObject.dispatch({ type: 'add' });
     });
 
     expect(globalObject.count).toBe(102)
