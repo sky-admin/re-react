@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import AReact from './AReact.jsx'
 const act = AReact.act
 
@@ -198,5 +198,39 @@ describe('Hooks', () => {
     });
 
     expect(globalObject.count).toBe(102)
+  })
+})
+
+describe('Event binding', () => {
+  it('should support event binding', async function () {
+    const container = document.createElement('div');
+    const globalObject = {
+      increase: (count) => count + 1,
+    };
+
+    const increaseSpy = vi.spyOn(globalObject, 'increase');
+
+    function App() {
+      const [count, setCount] = AReact.useState(100);
+      return (
+        <div>
+          {count}
+          <button onClick={() => setCount(globalObject.increase)}></button>
+        </div>
+      );
+    }
+
+    const root = AReact.createRoot(container);
+    await act(() => {
+      root.render(<App/>);
+    });
+
+    expect(increaseSpy).not.toBeCalled();
+    await act(() => {
+      container.querySelectorAll('button')[0].click();
+      container.querySelectorAll('button')[0].click();
+    });
+
+    expect(increaseSpy).toBeCalledTimes(2);
   })
 })

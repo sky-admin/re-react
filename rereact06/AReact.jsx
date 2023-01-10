@@ -22,7 +22,8 @@ function createTextElement(text) {
   }
 }
 
-const isProperty = (key) => key !== 'children'
+const isEvent = (key) => key.startsWith('on');
+const isProperty = (key) => key !== 'children' && !isEvent(key);
 let workInProgress = null;
 let workInProgressRoot = null;
 let currentHookFiber = null;
@@ -80,8 +81,16 @@ function performUnitOfWork(fiber) {
   } else {
     if (!fiber.stateNode) {
       fiber.stateNode = fiber.type === 'HostText' ? document.createTextNode('') : document.createElement(fiber.type);
+
+      // 属性绑定
       Object.keys(fiber.props).filter(isProperty).forEach(key => {
         fiber.stateNode[key] = fiber.props[key];
+      })
+
+      // 事件绑定
+      Object.keys(fiber.props).filter(isEvent).forEach(key => {
+        const eventName = key.toLowerCase().substring(2);
+        fiber.stateNode.addEventListener(eventName, fiber.props[key]);
       })
     }
     if (fiber.return) {
