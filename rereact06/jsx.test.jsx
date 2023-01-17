@@ -257,8 +257,13 @@ describe('Reconciler', () => {
     const root = AReact.createRoot(container);
     await act(() => {
       root.render(<App />);
-      expect(container.innerHTML).toBe('')
-    })
+    });
     expect(container.innerHTML).toBe('<div>2<button></button><button></button><ul><li>0</li><li>1</li></ul></div>')
+
+    await act(() => {
+      container.querySelectorAll('button')[0].click();
+    });
+    expect(container.innerHTML).toBe('<div>3<button></button><button></button><ul><li>0</li><li>1</li><li>2</li></ul></div>')
+
   })
 })
