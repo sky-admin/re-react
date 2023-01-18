@@ -178,6 +178,7 @@ function useState(initialState) {
     hook.state = typeof action === 'function' ? action(hook.state) : action;
   })
 
+  // todo: 这里有个bug，这个方式根本未能生效。需要考虑如何实现。
   const setState = oldHook ? oldHook.dispatch : (action) => {
     hook.queue.push(action);
 

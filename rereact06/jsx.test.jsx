@@ -265,5 +265,10 @@ describe('Reconciler', () => {
     });
     expect(container.innerHTML).toBe('<div>3<button></button><button></button><ul><li>0</li><li>1</li><li>2</li></ul></div>')
 
+    await act(() => {
+      container.querySelectorAll('button')[1].click();
+      // container.querySelectorAll('button')[1].click();
+    });
+    expect(container.innerHTML).toBe('<div>2<button></button><button></button><ul><li>0</li><li>1</li></ul></div>')
   })
 })

@@ -249,7 +249,7 @@ function useState(initialState) {
     hook.state = typeof action === 'function' ? action(hook.state) : action;
   })
 
-  const setState = oldHook ? oldHook.dispatch : (action) => {
+  const setState = (action) => {
     hook.queue.push(action);
 
     // re-render
